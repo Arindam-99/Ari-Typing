@@ -1,0 +1,312 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap');
+
+:root {
+  --bgColor: #333;
+  --textPrimary: #fff;
+  --textSecondary: #9a9a9a;
+  --primaryColor: #fd4;
+  --accent: #ff6b6b;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--bgColor);
+  color: var(--textPrimary);
+  font-size: 1.15rem;
+  margin: 0;
+  /* padding: 24px 0; */ /* Removed */
+  display: flex; /* Added */
+  align-items: center; /* Added */
+  justify-content: center; /* Added */
+  min-height: 100vh; /* Added */
+}
+main {
+  width: 80vw; /* Changed */
+  height: 80vh; /* Added */
+  /* margin: 30px auto; */ /* Removed */
+  padding: 22px;
+  border-radius: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.05)
+  );
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.6);
+
+  /* Add these lines to organize content vertically */
+  display: flex;
+  flex-direction: column;
+}
+
+h1 {
+  color: var(--primaryColor);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.6rem;
+  margin: 0 0 12px;
+}
+h1 svg {
+  width: 32px;
+  fill: orange;
+}
+
+#header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 16px;
+}
+#info {
+  color: var(--textPrimary);
+  font-weight: 600;
+}
+#stats {
+  color: var(--textSecondary);
+  font-size: 0.95rem;
+  margin-top: 6px;
+}
+
+#buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+button {
+  background: rgba(255, 255, 255, 0.06);
+  border: 0;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+button:active {
+  transform: translateY(1px);
+}
+
+/* This is needed to make the .main and #game fill the height */
+.main {
+  flex-grow: 1;
+  position: relative; /* Needed for child elements */
+  display: flex; /* Make it a flex container */
+}
+
+/* Game area */
+#game {
+  line-height: 34px;
+  /* height: 160px; */ /* Removed fixed height */
+  flex-grow: 1; /* Added this to make it fill .main */
+  overflow: hidden;
+  position: relative;
+  border-radius: 8px;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.12);
+  outline: none;
+  cursor: text;
+}
+#game:focus {
+  box-shadow: 0 0 0 2px rgba(253, 204, 0, 0.08);
+}
+
+#words {
+  filter: blur(5px);
+  color: var(--textSecondary);
+  font-size: 1.05rem;
+  transition: filter 0.18s;
+  word-break: break-word;
+}
+#game:focus #words {
+  filter: blur(0);
+}
+
+#focus-error {
+  position: absolute;
+  inset: 0;
+  text-align: center;
+  padding-top: 58px;
+  color: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+#game:focus #focus-error {
+  display: none;
+}
+
+.word {
+  display: inline-block;
+  margin: 0 8px 8px 0;
+  font-family: 'Roboto Mono', monospace;
+  white-space: pre;
+  vertical-align: top;
+}
+
+.letter {
+  display: inline-block;
+  min-width: 0.6ch;
+}
+
+.letter.correct {
+  color: #cfe9c9;
+}
+.letter.incorrect {
+  color: #ffb3b3;
+}
+
+.letter.extra {
+  opacity: 0.9;
+}
+
+.word.current {
+  text-decoration: underline 1px rgba(255, 255, 255, 0.03);
+}
+
+/* Cursor — absolute inside #game */
+#cursor {
+  display: none;
+  width: 2px;
+  height: 1.6rem;
+  background: var(--primaryColor);
+  position: absolute;
+  top: 14px; /* Matches padding */
+  left: 14px; /* Matches padding */
+  animation: blink 0.8s steps(1) infinite;
+  z-index: 20;
+}
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+#game:focus #cursor {
+  display: block;
+}
+
+/* Timer styling */
+#timer {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  font-weight: 700;
+  min-width: 62px;
+  text-align: center;
+}
+#timer.warn {
+  color: white;
+  background: linear-gradient(90deg, #ff8a8a, #ff3d3d);
+  box-shadow: 0 6px 18px rgba(255, 80, 80, 0.12);
+  animation: pulse 1s infinite;
+}
+@keyframes pulse {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Game over */
+#game.over {
+  opacity: 0.9;
+}
+#result {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--textPrimary);
+  font-weight: 600;
+}
+
+/* ---------------------------------- */
+/* -- RESPONSIVE PART -- ADDED THIS -- */
+/* ---------------------------------- */
+
+/* Targets tablets and phones */
+@media (max-width: 768px) {
+  body {
+    /* Use a smaller base font size on mobile */
+    font-size: 1rem;
+    /* Ensure no overflow issues */
+    overflow-x: hidden;
+  }
+
+  main {
+    /* Use more of the screen */
+    width: 95vw;
+    height: 90vh;
+    /* Reduce padding on small screens */
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: 1.3rem; /* Smaller title */
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  h1 svg {
+    width: 28px; /* Slightly smaller icon */
+  }
+
+  #header {
+    /* Stack the stats and buttons vertically */
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  #buttons {
+    /* Align buttons to the start */
+    justify-content: flex-start;
+  }
+
+  button {
+    /* Slightly larger tap target for mobile */
+    padding: 10px 14px;
+  }
+
+  #game {
+    /* Tighter padding and line height for small screens */
+    padding: 10px;
+    line-height: 30px;
+  }
+
+  #words {
+    /* Make word font slightly smaller */
+    font-size: 1rem;
+  }
+
+  #cursor {
+    height: 1.4rem; /* Match the new, smaller font/line-height */
+    top: 10px;
+    left: 10px;
+  }
+
+  #focus-error {
+    /* Re-center the focus error text */
+    padding-top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    padding: 10px; /* Add padding so it doesn't touch edges */
+  }
+}
+
+/* Remove the old, less complete media query */
+/*
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.2rem;
+  }
+}
+*/
